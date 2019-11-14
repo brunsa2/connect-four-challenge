@@ -6,29 +6,39 @@ class Board
   attr_reader :table
   attr_accessor :rows
 
+  ROWS = 6
+  COLUMNS = 7
+
   def initialize
     generate_board
   end
 
   def drop_checker(color, column)
+    index = next_free_row_index(column)
+    rows[index][column] = color
+  end
+
+  def next_free_row_index(column)
+    index = ROWS.dup
+    rows.reverse.find do |row|
+      index -= 1
+      row[column].nil?
+    end
+    return index
   end
 
   def generate_board
     rows = []
-    6.times do
+    ROWS.times do
       rows << []
     end
 
     rows.each do |r|
-      7.times do
-        r << empty_string
+      COLUMNS.times do
+        r << nil
       end
     end
     @rows = rows
-  end
-
-  def empty_string
-    "".freeze
   end
 
   def headers
